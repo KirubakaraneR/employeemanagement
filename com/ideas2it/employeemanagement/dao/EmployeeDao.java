@@ -20,5 +20,46 @@ public interface EmployeeDao {
      * @return true if datas are successfully added to table
      *         else false
      */    
-    public boolean addEmployee(Employee employee); 
+    public boolean addOrUpdateEmployee(Employee employee); 
+
+    /**
+     * We get list of all employees.
+     *
+     * @return List of all employees
+     */
+    public List<Employee> getAllEmployee();
+
+    /**
+     * We get an details of an individual employee.
+     * 
+     * @param id - Employee id
+     * 
+     * @return employee pojo
+     */
+    public Employee getIndividualEmployee(String id);
+
+    /**
+     * We get employee details of an particular year.
+     *
+     * @param year - Joining date of specific year
+     *
+     * @return List of employees who belong to specific year
+     */
+    public List<Employee> getAllEmployeeOfParticularYear(String year);
+
+    /**
+     * We assign list of projects to an employee.
+     *
+     * @param employee - Employee pojo
+     */
+    public void assignProjectToEmployee(Employee employee);
+
+    /**
+     * We get the count value of the joining date year.
+     * 
+     * @param year - Year belongs to joining date
+     *
+     * @return count of the year
+     */
+    public int getYearCount(String year);
 }

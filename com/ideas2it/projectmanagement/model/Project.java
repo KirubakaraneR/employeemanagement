@@ -70,6 +70,9 @@ public class Project {
         this.status = status;
     }
 
+    public Project() {
+    }
+
     public int getId() { 
         return id;
     }

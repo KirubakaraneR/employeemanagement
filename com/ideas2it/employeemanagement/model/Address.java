@@ -53,6 +53,9 @@ public class Address {
         this.addressType = addressType;
     }
 
+    public Address() {
+    }
+
     public Employee getEmployee() {
         return employee;
     }

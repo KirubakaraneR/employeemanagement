@@ -80,6 +80,9 @@ public class Employee {
         this.mailId = mailId;
     }
 
+    public Employee() {
+    }
+
     public String getId() {
         return id;
     }
