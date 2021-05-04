@@ -11,6 +11,9 @@ import com.ideas2it.employeemanagement.controller.EmployeeController;
 
 /**
  * We get the input values from the user and perform display operation.
+ *
+ * @version 1.0 04-05-2021
+ * @author Kirubakarane R
  */
 public class EmployeeView {
     private Scanner scanner = new Scanner(System.in);
@@ -27,7 +30,7 @@ public class EmployeeView {
         String printStatementForCrudOptions = "\nSelect an option you need to perform"
                 + "\n1.Create\n2.Display\n3.Update\n4.Delete"
                 + "\n5.Assign Project\n6.Unassign Project"
-                + "\n7.Display assigned project\n8.Exit";                 
+                + "\n7.Restore\n8.Exit";                 
         int userOption;
 
         do {
@@ -48,7 +51,7 @@ public class EmployeeView {
                          break;
                 case 6:  unassignProjectFromEmployee(); 
                          break;
-                case 7:  displayAssignedProject();
+                case 7:  restoreEmployee();
                          break;
                 case 8:  System.out.println("\nYou are back to home page");
                          break;
@@ -66,20 +69,23 @@ public class EmployeeView {
     public void createEmployee() {
         LocalDate dateOfJoin = getEmployeeDateOfJoin();
         String id = getValidEmployeeId(dateOfJoin.getYear());
-        String name = getEmployeeName();
-        LocalDate dateOfBirth = getEmployeeDateOfBirth();
-        int age = calculateEmployeeAge(dateOfBirth);
-        double salary = getEmployeeSalary();
-        String mobileNumber = getValidEmployeeMobileNumber();
-        String mailId = getValidEmployeeMailId();
+
+        if (employeeController.checkIdExistOrNot(id)) {
+            String name = getEmployeeName();
+            LocalDate dateOfBirth = getEmployeeDateOfBirth();
+            int age = calculateEmployeeAge(dateOfBirth);
+            double salary = getEmployeeSalary();
+            String mobileNumber = getValidEmployeeMobileNumber();
+            String mailId = getValidEmployeeMailId();
  
-        if (employeeController.createEmployee(id, name, dateOfJoin,
-                dateOfBirth, age, salary, mobileNumber, mailId)) {
-            System.out.println("Datas added successfully.");
-        } else {
-            System.out.println("There is an issue in adding datas.");
+            if (employeeController.createEmployee(id, name, dateOfJoin,
+                    dateOfBirth, age, salary, mobileNumber, mailId)) {
+                System.out.println("Datas added successfully.");
+            } else {
+                System.out.println("There is an issue in adding datas.");
+            }
+            createEmployeeAddress(id);
         }
-        createEmployeeAddress(id);
     }
 
     /**
@@ -90,7 +96,14 @@ public class EmployeeView {
     public LocalDate getEmployeeDateOfJoin() {
         System.out.println("\n[NOTE: Use this format YYYY-MM-DD]");
         System.out.print("\nDATE OF JOIN: ");
-        return LocalDate.parse(scanner.next());
+        LocalDate dateOfJoin = LocalDate.parse(scanner.next());
+
+        while (!employeeController.checkValidYear(dateOfJoin, "doj")) {
+            System.out.println("\nWARNING: The employee date of join is not in valid."
+                    + "\nPlease give id in valid format");
+            dateOfJoin = getEmployeeDateOfJoin();
+        }
+        return dateOfJoin;
     }
  
     /**
@@ -154,7 +167,14 @@ public class EmployeeView {
     public LocalDate getEmployeeDateOfBirth() {
         System.out.println("\n[NOTE: Use this format YYYY-MM-DD]");
         System.out.print("\nDATE OF BIRTH: ");
-        return LocalDate.parse(scanner.next());
+        LocalDate dateOfBirth = LocalDate.parse(scanner.next());
+
+        while (!employeeController.checkValidYear(dateOfBirth, "dob")) {
+            System.out.println("\nWARNING: The employee date of bith is not in valid."
+                    + "\nPlease give id in valid format");
+            dateOfBirth = getEmployeeDateOfBirth();
+        }
+        return dateOfBirth;
     }
 
     /** 
@@ -354,7 +374,8 @@ public class EmployeeView {
         String printStatementForDisplayOptions = "\nSelect an option you "
                 + "need to perform\n1.All employee\n2.Individual employee"
                 + "\n3.Employee belong to particular year"
-                + "\n4.Individual employee address\n5.Exit";
+                + "\n4.Individual employee address"
+                + "\n5.Display Assigned Project\n6.Exit";
         int userOption;
         
         do {
@@ -370,11 +391,13 @@ public class EmployeeView {
                          break;
                 case 4:  displayAddressOfIndividualEmployee();
                          break;
-                case 5:  break;
+                case 5:  displayAssignedProject();
+                         break;
+                case 6:  break;
                 default: System.out.println("\nWARNING: Invalid Entry");
                          continue;
             }
-        } while (5 != userOption);
+        } while (6 != userOption);
     }
 
     /**
@@ -733,12 +756,12 @@ public class EmployeeView {
      * We delete an individual address of an employee.
      */
     public void deleteIndividualAddress() {
-        System.out.print("\nEnter the employee id: ");
+        System.out.print("\nEnter the employee id:");
         String employeeId = scanner.next();
         System.out.print("\nEnter the address id: ");
         int addressId = scanner.nextInt();
 
-        if (employeeController.checkAddressIdExistOrNot(employeeId, addressId)) {
+        if (employeeController.checkAddressIdExistOrNot(addressId)) {
 
             if (employeeController.deleteIndividualAddress(employeeId, addressId)) {
                 System.out.println("Datas are deleted successfully.");
@@ -837,6 +860,25 @@ public class EmployeeView {
             }
         } else {
             System.out.println("\nThe given address id is not available.");
+        }
+    }
+
+    /**
+     * We restore the deleted employee from the table.
+     */
+    public void restoreEmployee() {  
+        System.out.print("\nEnter the Employee Id: ");
+        String id = scanner.next();
+        
+        if (employeeController.checkIdIsDeleted(id)) {
+
+            if (employeeController.restoreEmployee(id)) {
+                System.out.print("\nDatas are restored successfully");
+            } else {
+                System.out.print("\nThere is an error in restoring data.");
+            }
+        } else {
+            System.out.println("\nThe given employee id is not available.");
         }
     }
 }

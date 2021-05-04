@@ -8,12 +8,14 @@ import com.ideas2it.employeemanagement.model.Employee;
 /**
  * We create abstract method for all methods in employee 
  * dao implementation.
+ *
+ * @version 1.0 04-05-2021
+ * @author Kirubakarane R
  */
 public interface EmployeeDao {
 
     /**
-     * We add employee details of new joined employees to the table
-     * in data base
+     * We perform add and update operation to table.
      *
      * @param employee - Employee pojo
      *
@@ -48,11 +50,22 @@ public interface EmployeeDao {
     public List<Employee> getAllEmployeeOfParticularYear(String year);
 
     /**
-     * We assign list of projects to an employee.
+     * We get the count value of the non deleted employees.
+     * 
+     * @param id - Employee id
      *
-     * @param employee - Employee pojo
+     * @return count of the non deleted employee
      */
-    public void assignProjectToEmployee(Employee employee);
+    public int getIdCount(String id);
+
+    /**
+     * We get the count value of the non deleted address.
+     * 
+     * @param id - Address id
+     *
+     * @return count of the non deleted address
+     */
+    public int getAddressCount(int id);
 
     /**
      * We get the count value of the joining date year.
@@ -61,5 +74,15 @@ public interface EmployeeDao {
      *
      * @return count of the year
      */
-    public int getYearCount(String year);
+    public int getYearCount(int year);
+
+    /**
+     * We check whether the given id is deleted.
+     * 
+     * @param id - Employee id
+     *
+     * @return true if id is deleted
+     *         else false
+     */
+    public int getDeletedIdCount(String id);
 }

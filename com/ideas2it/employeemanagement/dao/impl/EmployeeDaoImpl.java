@@ -2,6 +2,7 @@ package com.ideas2it.employeemanagement.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.hibernate.HibernateException;
 import org.hibernate.query.Query;
 import org.hibernate.SessionFactory;
@@ -14,7 +15,10 @@ import com.ideas2it.projectmanagement.model.Project;
 import com.ideas2it.sessionfactory.DataBaseConnection;
 
 /**
- * We perform create, read, update operations to the table in data base
+ * We perform create, read, update operations to the table in data base.
+ *
+ * @version 1.0 04-05-2021
+ * @author Kirubakarane R
  */
 public class EmployeeDaoImpl implements EmployeeDao {
     private DataBaseConnection dataBaseConnection = DataBaseConnection.getInstance();
@@ -103,7 +107,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
         try {
             session = dataBaseConnection.getSessionFactory().openSession();
             Query query = session.createQuery("FROM Employee employee "
-                + "WHERE SUBSTRING(YEAR(employee.date_of_join),3) = :year "
+                + "WHERE SUBSTRING(YEAR(date_of_join),3) = :year "
                 + "AND is_deleted = false");
             query.setParameter("year", year);
             employee = query.list();
@@ -122,37 +126,90 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * {@inheritdoc}
      */
     @Override
-    public void assignProjectToEmployee(Employee employee) {
-        Session session = null;
-
-        try {
-            session = dataBaseConnection.getSessionFactory().openSession();
-            session.beginTransaction();
-            session.merge(employee);
-            session.getTransaction().commit();
-        } catch (HibernateException e) {
-            session.getTransaction().rollback();
-        } finally {
-
-            if(session != null) {
-                session.close();
-            }
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    @Override
-    public int getYearCount(String year) {
+    public int getYearCount(int year) {
         Session session = null;
         int count = 0;
 
         try {
             session = dataBaseConnection.getSessionFactory().openSession();
             Query query = session.createQuery("SELECT COUNT(date_of_join) FROM Employee employee WHERE"
-                    + " YEAR(date_of_join) = :year");
+                    + " YEAR(date_of_join) = :year AND is_deleted = false");
             query.setParameter("year", year);
+            count = ((Long)query.uniqueResult()).intValue();
+        } catch (HibernateException e) {
+            count = 0;
+        } finally {
+
+            if(session != null) {
+                session.close();
+            }
+        }
+        return count;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public int getIdCount(String id) {
+        Session session = null;
+        int count = 0;
+
+        try {
+            session = dataBaseConnection.getSessionFactory().openSession();
+            Query query = session.createQuery("SELECT COUNT(id) FROM Employee employee WHERE"
+                    + " is_deleted = false AND id = :id");
+            query.setParameter("id", id);
+            count = ((Long)query.uniqueResult()).intValue();
+        } catch (HibernateException e) {
+            count = 0;
+        } finally {
+
+            if(session != null) {
+                session.close();
+            }
+        }
+        return count;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public int getAddressCount(int id) {
+        Session session = null;
+        int count = 0;
+
+        try {
+            session = dataBaseConnection.getSessionFactory().openSession();
+            Query query = session.createQuery("SELECT COUNT(id) FROM Address address WHERE"
+                    + " is_deleted = false AND id = :id");
+            query.setParameter("id", id);
+            count = ((Long)query.uniqueResult()).intValue();
+        } catch (HibernateException e) {
+            count = 0;
+        } finally {
+
+            if(session != null) {
+                session.close();
+            }
+        }
+        return count;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public int getDeletedIdCount(String id) {
+        Session session = null;
+        int count = 0;
+
+        try {
+            session = dataBaseConnection.getSessionFactory().openSession();
+            Query query = session.createQuery("SELECT COUNT(id) FROM Address address WHERE"
+                    + " is_deleted = true AND id = :id");
+            query.setParameter("id", id);
             count = ((Long)query.uniqueResult()).intValue();
         } catch (HibernateException e) {
             count = 0;

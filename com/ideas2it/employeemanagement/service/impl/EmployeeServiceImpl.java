@@ -18,7 +18,10 @@ import com.ideas2it.projectmanagement.service.impl.ProjectServiceImpl;
 
 /**
  * We perform create and update operation to pojo and also
- * pass the values to employee dao to perform CRUD operation in DB
+ * pass the values to employee dao to perform CRUD operation in DB.
+ *
+ * @version 1.0 04-05-2021
+ * @author Kirubakarane R
  */  
 public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeDao employeeDao = new EmployeeDaoImpl();
@@ -81,6 +84,15 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
+    public boolean checkValidYear(LocalDate date, String temp) {
+        return ("doj".equals(temp)) ? (2010 < date.getYear()) ? true : false
+                                    : ((LocalDate.now().getYear() - 60) < date.getYear()) ? true : false; 
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
     public List<String> getAllEmployeeForDisplay() {
         List<Employee> employeeList = employeeDao.getAllEmployee();
         List<String> employeeDetails = new ArrayList<String>();
@@ -101,9 +113,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<String> employeeDetails = new ArrayList<String>();
         employeeDetails.add(employee.toString());
  
-        /*for (Address addressValues : employeeAddress) {
-            employeeDetails.add(addressValues.toString());
-        }*/
+        for (Address addressValues : employeeAddress) {
+
+            if (!addressValues.getIsDeleted()) {
+                employeeDetails.add(addressValues.toString());
+            }
+        }
         return employeeDetails;
     }
 
@@ -256,7 +271,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         assignedProject.addAll(project);
         employee.setId(id);
         employee.setProjects(assignedProject);
-        employeeDao.assignProjectToEmployee(employee);
+        employeeDao.addOrUpdateEmployee(employee);
     }
 
     /**
@@ -281,7 +296,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         employee.setId(id);
         employee.setProjects(assignedProject);
-        employeeDao.assignProjectToEmployee(employee);
+        employeeDao.addOrUpdateEmployee(employee);
     }
 
     /**
@@ -371,29 +386,17 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public boolean checkIdExistOrNot(String id) {
-        Employee employee = employeeDao.getIndividualEmployee(id);
-        return (null == employee) ? false : true;
+        int count = employeeDao.getIdCount(id);
+        return (0 == count) ? false : true;
     }
 
     /**
      * {@inheritdoc}
      */
     @Override
-    public boolean checkAddressIdExistOrNot(String employeeId, int addressId) {
-        Employee employee = employeeDao.getIndividualEmployee(employeeId);
-        boolean isChecked = false;
-        List<Address> address = employee.getAddresses();
-
-        if (null != employee) {
-            
-            for (Address values : address) {
-            
-                if (addressId == values.getId()) {
-                    isChecked = true;
-                }
-            } 
-        }
-        return isChecked;
+    public boolean checkAddressIdExistOrNot(int addressId) {
+        int count = employeeDao.getAddressCount(addressId);
+        return (0 == count) ? false : true;
     }
 
     /**
@@ -401,7 +404,31 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public boolean checkYearExistOrNot(String year) {
-        int count = employeeDao.getYearCount(year);
+        int count = employeeDao.getYearCount(Integer.parseInt(year));
+        return (0 == count) ? false : true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public boolean restoreEmployee(String id) {
+        Employee employee = employeeDao.getIndividualEmployee(id);
+        employee.setIsDeleted(false);
+        List<Address> addressList = employee.getAddresses();
+ 
+        for (Address address : addressList) {
+            address.setIsDeleted(false);
+        }
+        return employeeDao.addOrUpdateEmployee(employee);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public boolean checkIdIsDeleted(String id) {
+        int count = employeeDao.getDeletedIdCount(id);
         return (0 == count) ? false : true;
     }
 }

@@ -7,13 +7,15 @@ import com.ideas2it.projectmanagement.model.Project;
 
 /**
  * We create abstract method for all methods in project 
- * dao implementation
+ * dao implementation.
+ *
+ * @version 1.0 04-05-2021
+ * @author Kirubakarane R
  */
 public interface ProjectDao {
     
     /**
      * We perform addition or updation of project details to table.
-     * Details such as name, start date, end date and status of project.
      * 
      * @param project - Project pojo
      *
@@ -37,9 +39,20 @@ public interface ProjectDao {
     public Project getProject(int id);
 
     /**
-     * We assign list of employees to the project
+     * We get the id count for given project id.
      *
-     * @param project - Project pojo
+     * @param id - Project id
+     *
+     * @return count
      */
-    public void assignEmployeeToProject(Project project);
+    public int getIdCount(int id);
+
+    /**
+     * We get the id count of deleted id for given project id.
+     *
+     * @param id - Project id
+     *
+     * @return count
+     */
+    public int getDeletedIdCount(int id);
 }

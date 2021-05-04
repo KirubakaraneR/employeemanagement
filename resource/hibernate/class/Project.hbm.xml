@@ -12,7 +12,7 @@
         <property name="endDate" column="end_date" type="date"/>
         <property name="status" column="status" type="string"/>
         <property name="isDeleted" column="is_deleted" type="boolean"/>
-        <bag table="employee_project" name="employees" lazy="false">
+        <bag table="employee_project" name="employees" lazy="true">
             <key column="project_id"/>
             <many-to-many column="employee_id" class="com.ideas2it.employeemanagement.model.Employee"/>
         </bag>

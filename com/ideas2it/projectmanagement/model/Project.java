@@ -10,7 +10,7 @@ import com.ideas2it.employeemanagement.model.Employee;
  * It contains project details such as project id, project name,
  * start date, end date, status 
  *
- * @version 1.0 09 March 2021
+ * @version 1.0 04-05-2021
  * @author Kirubakarane R
  */
 public class Project {
@@ -23,47 +23,16 @@ public class Project {
     private List<Employee> employees;
 
     /**
-     * Here we get the project details
+     * Here we get the project details.
      * 
-     * @param id - Project id
-     * @param name - Project name
-     * @param startDate - Project start date
-     * @param endDate - Project end date
-     * @param status - Project status
-     * @param employee - List of Employee details
-     */
-    public Project(int id, String name,
-            Date startDate, Date endDate,
-            String status, List<Employee> employees) {
-        this.id = id;
-        this.name = name;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.status = status;
-        this.employees = employees;
-    }
-
-    /**
-     * Here we get the project details
-     * 
-     * @param id - Project id
      * @param name - Project name
      * @param startDate - Project start date
      * @param endDate - Project end date
      * @param status - Project status
      */
-    public Project(int id, String name,
+    public Project(String name,
             Date startDate, Date endDate,
             String status) {
-        this.id = id;
-        this.name = name;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.status = status;
-    }
- 
-    public Project(String name, Date startDate,
-            Date endDate, String status) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;

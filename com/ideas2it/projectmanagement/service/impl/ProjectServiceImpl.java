@@ -16,7 +16,10 @@ import com.ideas2it.projectmanagement.service.ProjectService;
 
 /**
  * We perform create and update operation to pojo and also
- * pass the values to project dao to perform CRUD operation in DB
+ * pass the values to project dao to perform CRUD operation in DB.
+ *
+ * @version 1.0 04-05-2021
+ * @author Kirubakarane R
  */
 public class ProjectServiceImpl implements ProjectService {
     private ProjectDao projectDao = new ProjectDaoImpl();
@@ -39,6 +42,14 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectDao.getProject(id);
         List<String> projectDetails = new ArrayList<String>();
         projectDetails.add(project.toString());
+        List<Employee> employee = project.getEmployees();
+
+        for (Employee employeeValues : employee) {
+            
+            if (!employeeValues.getIsDeleted()) {
+                projectDetails.add(employeeValues.toString());
+            }
+        }
         return projectDetails;
     }
 
@@ -62,7 +73,6 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public boolean updateProjectName(int id, String name) {
         Project project = projectDao.getProject(id);
-        project.setId(id);
         project.setName(name);
         return projectDao.addOrUpdateProject(project);
     }
@@ -73,7 +83,6 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public boolean updateStartDate(int id, LocalDate startDate) {
         Project project = projectDao.getProject(id);
-        project.setId(id);
         project.setStartDate(Date.valueOf(startDate));
         return projectDao.addOrUpdateProject(project);
     }
@@ -84,7 +93,6 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public boolean updateEndDate(int id, LocalDate endDate) {
         Project project = projectDao.getProject(id);
-        project.setId(id);
         project.setEndDate(Date.valueOf(endDate));
         return projectDao.addOrUpdateProject(project);
     }
@@ -95,7 +103,6 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public boolean updateProjectStatus(int id, String status) {
         Project project = projectDao.getProject(id); 
-        project.setId(id);
         project.setStatus(status);
         return projectDao.addOrUpdateProject(project);  
     }
@@ -106,7 +113,6 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public boolean deleteProject(int id) {
         Project project = projectDao.getProject(id); 
-        project.setId(id);
         project.setIsDeleted(true);
         return projectDao.addOrUpdateProject(project);
     }
@@ -123,7 +129,7 @@ public class ProjectServiceImpl implements ProjectService {
         assignedEmployee.addAll(employeeList);
         project.setId(id);
         project.setEmployees(assignedEmployee);
-        projectDao.assignEmployeeToProject(project);
+        projectDao.addOrUpdateProject(project);
     }
 
     /**
@@ -147,7 +153,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
         project.setId(id);
         project.setEmployees(assignedEmployee);
-        projectDao.assignEmployeeToProject(project); 
+        projectDao.addOrUpdateProject(project); 
     }
  
     /**
@@ -237,7 +243,26 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
     public boolean checkIdExistOrNot(int id) {
-        Project project = projectDao.getProject(id);
-        return (null == project) ? false : true;
+        int count = projectDao.getIdCount(id);
+        return (0 == count) ? false : true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public boolean checkIdIsDeleted(int id) {
+        int count = projectDao.getDeletedIdCount(id);
+        return (0 == count) ? false : true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public boolean restoreProject(int id) {
+        Project project = projectDao.getProject(id); 
+        project.setIsDeleted(false);
+        return projectDao.addOrUpdateProject(project);
     }
 }

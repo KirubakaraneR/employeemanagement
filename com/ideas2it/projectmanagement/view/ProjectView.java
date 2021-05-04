@@ -8,7 +8,10 @@ import java.util.Scanner;
 import com.ideas2it.projectmanagement.controller.ProjectController;
 
 /**
- * We get the input values and perform display operation
+ * We get the input values and perform display operation.
+ *
+ * @version 1.0 04-05-2021
+ * @author Kirubakarane R
  */
 public class ProjectView {
     private Scanner scanner = new Scanner(System.in);
@@ -22,7 +25,7 @@ public class ProjectView {
     public void selectCrudOptions() {
         String printStatement = "\nChoose the option you need to perform"
                 + "\n1.Create\n2.Display\n3.Update\n4.Assign Project"
-                + "\n5.Unassign Project\n6.Display Assigned Employees\n7.Delete\n8.Exit";
+                + "\n5.Unassign Project\n6.Restore Project\n7.Delete\n8.Exit";
         int userOption;
         
         do {
@@ -40,7 +43,7 @@ public class ProjectView {
                          break;
                 case 5:  unassignEmployeeFromProject();
                          break;
-                case 6:  displayAssignedEmployee();
+                case 6:  restoreProject();
                          break;
                 case 7:  deleteProject();
                          break;
@@ -117,7 +120,8 @@ public class ProjectView {
      */
     public void chooseOptionForDisplay() {
         System.out.println("\nChoose an option to display"
-                + "\n1.Individual Project\n2.All Project\n3.Exit");
+                + "\n1.Individual Project\n2.All Project"
+                + "\n3.Display Assigned Employees\n4.Exit");
         int userOption = scanner.nextInt();
 
         switch (userOption) {
@@ -125,7 +129,9 @@ public class ProjectView {
                      break;
             case 2:  displayAllProject();
                      break;
-            case 3:  break;
+            case 3:  displayAssignedEmployee();
+                     break;
+            case 4:  break;
             default: System.out.println("\nWARNING: Invalid Entry");
                      break;
         }
@@ -341,6 +347,25 @@ public class ProjectView {
             }
         } else {
             System.out.println("\nThe given id is not available.");
+        }
+    }
+
+    /**
+     * We restore the deleted project from the table.
+     */
+    public void restoreProject() {  
+        System.out.print("\nEnter the Project Id: ");
+        int id = scanner.nextInt();
+        
+        if (projectController.checkIdIsDeleted(id)) {
+
+            if (projectController.restoreProject(id)) {
+                System.out.print("\nDatas are restored successfully");
+            } else {
+                System.out.print("\nThere is an error in restoring data.");
+            }
+        } else {
+            System.out.println("\nThe given project id is not available.");
         }
     }
 }

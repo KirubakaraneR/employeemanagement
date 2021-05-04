@@ -7,7 +7,10 @@ import com.ideas2it.employeemanagement.model.Employee;
 
 /**
  * We create abstract method for all methods in employee 
- * service implementation
+ * service implementation.
+ *
+ * @version 1.0 04-05-2021
+ * @author Kirubakarane R
  */
 public interface EmployeeService {
 
@@ -86,6 +89,17 @@ public interface EmployeeService {
      *         else false
      */
     public boolean checkValidEmployeeMailId(String mailId);
+
+    /**
+     * We check whether the year is valid or not.
+     *
+     * @param dateOfJoin - Joining date of the employee
+     * @param temp - Temp variable
+     *
+     * @return true if the date is in valid format
+     *         else return false
+     */
+    public boolean checkValidYear(LocalDate date, String temp);
 
     /**
      * We display the whole employee data by returning values to 
@@ -269,12 +283,11 @@ public interface EmployeeService {
      * We check whether the address id exist in the table or not.
      *
      * @param addressId - Address id
-     * @param employeeId - Employee id
      *
      * @return true if id exists
      *         else false
      */
-    public boolean checkAddressIdExistOrNot(String employeeId, int addressId);
+    public boolean checkAddressIdExistOrNot(int addressId);
 
     /**
      * We check whether the year exist in the table or not.
@@ -285,4 +298,24 @@ public interface EmployeeService {
      *         else false
      */
     public boolean checkYearExistOrNot(String year);
+
+    /**
+     * We restore the deleted employee from the table.
+     * 
+     * @param id - Employee id
+     *
+     * @return true if values are restored successfully
+     *         else false
+     */
+    public boolean restoreEmployee(String id);
+
+    /**
+     * We check whether the given id is deleted.
+     * 
+     * @param id - Employee id
+     *
+     * @return true if id is deleted
+     *         else false
+     */
+    public boolean checkIdIsDeleted(String id);
 }

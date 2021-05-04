@@ -11,7 +11,7 @@ import com.ideas2it.projectmanagement.model.Project;
  * It contains employee details such as id, name, mobile number, email,
  * salary, address, date of birth and date of join  
  *
- * @version 1.0 12 March 2021
+ * @version 1.0 04-05-2021
  * @author Kirubakarane R
  */
 public class Employee {
@@ -26,33 +26,6 @@ public class Employee {
     private boolean isDeleted;
     private List<Address> addresses;
     private List<Project> projects;
-
-    /**
-     * Here we get the employee details 
-     *
-     * @param dateOfJoin - Employee date of join
-     * @param id - Employee id
-     * @param name - Employee name
-     * @param dateOfBirth - employee date of birth
-     * @param age - employee age
-     * @param mobileNumber - employee mobile number
-     * @param mailId - employee mail id
-     * @param salary - employee salary
-     * @param address - employee address
-     */
-    public Employee(String id, String name, Date dateOfJoin, 
-            Date dateOfBirth, int age, double salary, 
-            String mobileNumber, String mailId, List<Address> addresses) {
-        this.dateOfJoin = dateOfJoin;        
-        this.id = id;
-        this.name = name;
-        this.dateOfBirth = dateOfBirth;
-        this.age = age;
-        this.salary = salary;
-        this.mobileNumber = mobileNumber;
-        this.mailId = mailId;
-        this.addresses = addresses;
-    }
  
     /**
      * Here we get the employee details except address
@@ -111,7 +84,7 @@ public class Employee {
         return mailId;
     }
 
-    public void setMailId(String email) {
+    public void setMailId(String mailId) {
         this.mailId = mailId;
     }
 

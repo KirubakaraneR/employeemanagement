@@ -7,7 +7,10 @@ import com.ideas2it.projectmanagement.model.Project;
 
 /**
  * We create abstract method for all methods in project 
- * service implementation
+ * service implementation.
+ *
+ * @version 1.0 04-05-2021
+ * @author Kirubakarane R
  */
 public interface ProjectService {
 
@@ -157,4 +160,24 @@ public interface ProjectService {
      *         else false
      */
     public boolean checkIdExistOrNot(int id);
+
+    /**
+     * We check whether the id is deleted.
+     * 
+     * @param id - Project id
+     * 
+     * @return true if the id is deleted
+     *         else false
+     */
+    public boolean checkIdIsDeleted(int id);
+
+    /**
+     * We restore the deleted project.
+     *
+     * @param id - project id
+     *
+     * @return true if project is restored successfully
+     *         else false
+     */
+    public boolean restoreProject(int id);
 }

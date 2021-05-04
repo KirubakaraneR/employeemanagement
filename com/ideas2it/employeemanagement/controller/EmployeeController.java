@@ -9,6 +9,9 @@ import com.ideas2it.employeemanagement.service.impl.EmployeeServiceImpl;
 /**
  * We get user values from the employee view and pass to employee 
  * service to perform create, read, and update operations
+ *
+ * @version 1.0 04-05-2021
+ * @author Kirubakarane R
  */
 public class EmployeeController {
     private EmployeeService employeeService = new EmployeeServiceImpl();
@@ -100,6 +103,19 @@ public class EmployeeController {
      */
     public boolean checkValidEmployeeMailId(String mailId) {
         return employeeService.checkValidEmployeeMailId(mailId);
+    }
+
+    /**
+     * We check whether the year is valid or not.
+     *
+     * @param dateOfJoin - Joining date of the employee
+     * @param temp - Temp variable
+     *
+     * @return true if the date is in valid format
+     *         else return false
+     */
+    public boolean checkValidYear(LocalDate date, String temp) {
+        return employeeService.checkValidYear(date, temp);
     }
 
     /**
@@ -307,13 +323,12 @@ public class EmployeeController {
      * We check whether the address id exist in the table or not.
      *
      * @param addressId - Address id
-     * @param employeeId - Employee id
      *
      * @return true if id exists
      *         else false
      */
-    public boolean checkAddressIdExistOrNot(String employeeId, int addressId) {
-        return employeeService.checkAddressIdExistOrNot(employeeId, addressId);
+    public boolean checkAddressIdExistOrNot(int addressId) {
+        return employeeService.checkAddressIdExistOrNot(addressId);
     }
 
     /**
@@ -326,5 +341,29 @@ public class EmployeeController {
      */
     public boolean checkYearExistOrNot(String year) {
         return employeeService.checkYearExistOrNot(year);
+    }
+
+    /**
+     * We restore the deleted employee from the table.
+     * 
+     * @param id - Employee id
+     *
+     * @return true if values are restored successfully
+     *         else false
+     */
+    public boolean restoreEmployee(String id) {
+        return employeeService.restoreEmployee(id);
+    }
+
+    /**
+     * We check whether the given id is deleted.
+     * 
+     * @param id - Employee id
+     *
+     * @return true if id is deleted
+     *         else false
+     */
+    public boolean checkIdIsDeleted(String id) {
+        return employeeService.checkIdIsDeleted(id);
     }
 }

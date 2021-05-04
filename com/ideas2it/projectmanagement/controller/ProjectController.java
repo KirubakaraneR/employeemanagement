@@ -8,7 +8,10 @@ import com.ideas2it.projectmanagement.service.ProjectService;
 
 /**
  * We get user values from the project view and pass to projec
- * service to perform create, read, and update operations
+ * service to perform create, read, and update operations.
+ *
+ * @version 1.0 04-05-2021
+ * @author Kirubakarane R
  */
 public class ProjectController {
     private ProjectService projectService = new ProjectServiceImpl();
@@ -180,5 +183,29 @@ public class ProjectController {
      */
     public boolean checkIdExistOrNot(int id) {
         return projectService.checkIdExistOrNot(id);
+    }
+
+    /**
+     * We check whether the id is deleted.
+     * 
+     * @param id - Project id
+     * 
+     * @return true if the id is deleted
+     *         else false
+     */
+    public boolean checkIdIsDeleted(int id) {
+        return projectService.checkIdIsDeleted(id);
+    }
+
+    /**
+     * We restore the deleted project.
+     *
+     * @param id - project id
+     *
+     * @return true if project is restored successfully
+     *         else false
+     */
+    public boolean restoreProject(int id) {
+        return projectService.restoreProject(id);
     }
 }
