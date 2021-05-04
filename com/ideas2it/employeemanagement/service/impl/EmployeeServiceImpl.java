@@ -221,10 +221,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeDao.getIndividualEmployee(id);
         employee.setIsDeleted(true);
         List<Address> employeeAddress = employee.getAddresses();
+        List<Project> project = employee.getProjects();
 
         for (Address address : employeeAddress) {
             address.setIsDeleted(true);
         }
+        project.clear();
+        employee.setProjects(project);
         return employeeDao.addOrUpdateEmployee(employee);
     }
 

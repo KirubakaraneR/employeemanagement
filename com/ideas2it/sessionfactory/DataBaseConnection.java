@@ -39,7 +39,9 @@ public class DataBaseConnection {
         try {
             
             if (null == sessionFactory) {
-                sessionFactory = new Configuration().configure("/resource/hibernate/properties/hibernate.cfg.xml").buildSessionFactory();
+                sessionFactory = new Configuration()
+                        .configure("/resource/hibernate/properties/hibernate.cfg.xml")
+                        .buildSessionFactory();
             }
         } catch (HibernateException e) {
             e.printStackTrace(); 

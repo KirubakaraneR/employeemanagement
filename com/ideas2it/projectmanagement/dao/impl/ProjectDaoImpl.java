@@ -41,10 +41,7 @@ public class ProjectDaoImpl implements ProjectDao {
             checkIsAdded = false;
             session.getTransaction().rollback();
         } finally {
-
-            if(session != null) {
-                session.close();
-            }
+            closeSession(session);
         }
         return checkIsAdded;
     }
@@ -89,10 +86,7 @@ public class ProjectDaoImpl implements ProjectDao {
             e.printStackTrace();
             session.getTransaction().rollback();
         } finally {
-      
-            if(session != null) {
-                session.close();
-            }
+            closeSession(session);
         }
         return project;
     }
@@ -114,10 +108,7 @@ public class ProjectDaoImpl implements ProjectDao {
         } catch (HibernateException e) {
             count = 0;
         } finally {
-
-            if(session != null) {
-                session.close();
-            }
+            closeSession(session);
         }
         return count;
     }
@@ -139,11 +130,17 @@ public class ProjectDaoImpl implements ProjectDao {
         } catch (HibernateException e) {
             count = 0;
         } finally {
-
-            if(session != null) {
-                session.close();
-            }
+            closeSession(session);
         }
         return count;
+    }
+
+    /**
+     * We close the session object.
+     */
+    private void closeSession(Session session) {
+        if(session != null) {
+            session.close();
+        }
     }
 }

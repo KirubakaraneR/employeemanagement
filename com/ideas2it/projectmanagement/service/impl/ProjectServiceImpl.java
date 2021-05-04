@@ -114,6 +114,9 @@ public class ProjectServiceImpl implements ProjectService {
     public boolean deleteProject(int id) {
         Project project = projectDao.getProject(id); 
         project.setIsDeleted(true);
+        List<Employee> employee = project.getEmployees();
+        employee.clear();
+        project.setEmployees(employee);
         return projectDao.addOrUpdateProject(project);
     }
 

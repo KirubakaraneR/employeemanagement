@@ -40,10 +40,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             checkIsAdded = false;
             session.getTransaction().rollback();
         } finally {
-
-            if(session != null) {
-                session.close();
-            }
+            closeSession(session);
         }
         return checkIsAdded;
     }
@@ -63,10 +60,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
         } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
-
-            if(session != null) {
-                session.close();
-            }
+            closeSession(session);
         }
         return employee;
     }
@@ -88,10 +82,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             e.printStackTrace();
             session.getTransaction().rollback();
         } finally {
-
-            if(session != null) {
-                session.close();
-            }
+            closeSession(session);
         }
         return employee;
     }
@@ -114,10 +105,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
         } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
-
-            if(session != null) {
-                session.close();
-            }
+            closeSession(session);
         }
         return employee;
     }
@@ -139,10 +127,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
         } catch (HibernateException e) {
             count = 0;
         } finally {
-
-            if(session != null) {
-                session.close();
-            }
+            closeSession(session);
         }
         return count;
     }
@@ -164,10 +149,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
         } catch (HibernateException e) {
             count = 0;
         } finally {
-
-            if(session != null) {
-                session.close();
-            }
+            closeSession(session);
         }
         return count;
     }
@@ -189,10 +171,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
         } catch (HibernateException e) {
             count = 0;
         } finally {
-
-            if(session != null) {
-                session.close();
-            }
+            closeSession(session);
         }
         return count;
     }
@@ -207,18 +186,24 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
         try {
             session = dataBaseConnection.getSessionFactory().openSession();
-            Query query = session.createQuery("SELECT COUNT(id) FROM Address address WHERE"
+            Query query = session.createQuery("SELECT COUNT(id) FROM Employee employee WHERE"
                     + " is_deleted = true AND id = :id");
             query.setParameter("id", id);
             count = ((Long)query.uniqueResult()).intValue();
         } catch (HibernateException e) {
             count = 0;
         } finally {
-
-            if(session != null) {
-                session.close();
-            }
+            closeSession(session);
         }
         return count;
+    }
+
+    /**
+     * We close the session object.
+     */
+    private void closeSession(Session session) {
+        if(session != null) {
+            session.close();
+        }
     }
 }
