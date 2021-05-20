@@ -3,7 +3,7 @@
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="com.ideas2it.employeemanagement.model.Employee" table="employee" dynamic-update="true">
+    <class name="com.ideas2it.project.employeemanagement.model.Employee" table="employee" dynamic-update="true">
         <id name="id" column="id" type="string">
             <generator class="assigned"/>
         </id>
@@ -15,13 +15,14 @@
         <property name="mailId" column="mail_id" type="string"/>
         <property name="salary" column="salary" type="double"/>
         <property name="isDeleted" column="is_deleted" type="boolean"/>
+        <property name="password" column="password" type="string"/>
         <bag table="address" name="addresses" lazy="true" cascade="save-update">
             <key column="employee_id"/>
-            <one-to-many class="com.ideas2it.employeemanagement.model.Address"/>
+            <one-to-many class="com.ideas2it.project.employeemanagement.model.Address"/>
         </bag>
         <bag table="employee_project" name="projects" lazy="true">
             <key column="employee_id"/>
-            <many-to-many column="project_id" class="com.ideas2it.projectmanagement.model.Project"/>
+            <many-to-many column="project_id" class="com.ideas2it.project.projectmanagement.model.Project"/>
         </bag>
     </class>
 </hibernate-mapping>

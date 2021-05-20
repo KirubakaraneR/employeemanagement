@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="com.ideas2it.projectmanagement.model.Project"%>
+    pageEncoding="ISO-8859-1" import="com.ideas2it.project.projectmanagement.model.Project"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
@@ -101,6 +101,12 @@ crossorigin="anonymous">
 </style>
 </head>
 <body>
+  <%
+  response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+  if (session.getAttribute("mailId") == null) {
+	    response.sendRedirect("index.jsp");
+    }%>
+    
   <div class="header">
     <h1>Ideas2IT Technologies</h1>
     <a href="EmployeeController?action=indexPage">
@@ -115,7 +121,7 @@ crossorigin="anonymous">
     <button>Create Project</button></a>&nbsp;&nbsp;&nbsp;
     <a href="EmployeeController?action=changeAdminPassword">
     <button>Change Password</button></a>&nbsp;&nbsp;&nbsp;
-    <a href="EmployeeController?action=logout">
+    <a href="LoginAuthentication">
     <button>Logout</button></a>
   </div>
     
@@ -149,6 +155,7 @@ crossorigin="anonymous">
           placeholder="Enter the District" pattern="[A-Za-z ]*"
           value="<c:out value='${address.get(0).district}'/>"><br>
     </div>
+    
     <div id="right-box">
       <label>State:</label><br>
       <input type="text" name="state" 
@@ -167,13 +174,13 @@ crossorigin="anonymous">
           value="Permanent" checked>&nbsp;Permanent&nbsp;&nbsp;&nbsp;&nbsp;
       <input type="radio" name="addressType" 
           value="Temporary">&nbsp;Temporary<br><br>
-      <input type="hidden" name="addressId" 
-          value="<c:out value='${address.get(0).id}'/>">
-      <input type="hidden" name="employeeId" 
-          value="${address.get(0).employee.id}">
+      <input type="hidden" name="addressId" value="<c:out value="${address.get(0).id}"/>">
+      <input type="hidden" name="employeeId" value="<%=request.getParameter("employeeId")%>">
       <input type="submit" value="Submit">
     </div>
+    
     </form>
   </div>
+  
 </body>
 </html>

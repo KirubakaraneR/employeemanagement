@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="com.ideas2it.projectmanagement.model.Project"%>
+    pageEncoding="ISO-8859-1" import="com.ideas2it.project.projectmanagement.model.Project"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
@@ -104,7 +104,15 @@ crossorigin="anonymous">
 </style>
 </head>
 <body>
-
+  <%
+  
+  response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+  
+  if (session.getAttribute("mailId") == null) {
+	    response.sendRedirect("index.jsp");
+    }
+    %>
+    
   <div class="header">
     <h1>Ideas2IT Technologies</h1>
     <a href="EmployeeController?action=indexPage">
@@ -119,7 +127,7 @@ crossorigin="anonymous">
     <button>Create Project</button></a>&nbsp;&nbsp;&nbsp;
     <a href="EmployeeController?action=changeAdminPassword">
     <button>Change Password</button></a>&nbsp;&nbsp;&nbsp;
-    <a href="EmployeeController?action=logout">
+    <a href="LoginAuthentication">
     <button>Logout</button></a>
   </div>
     

@@ -3,7 +3,7 @@
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="com.ideas2it.projectmanagement.model.Project" table="project" dynamic-update="true">
+    <class name="com.ideas2it.project.projectmanagement.model.Project" table="project" dynamic-update="true">
         <id name="id" column="id" type="int">
             <generator class="increment"/>
         </id>
@@ -14,7 +14,7 @@
         <property name="isDeleted" column="is_deleted" type="boolean"/>
         <bag table="employee_project" name="employees" lazy="true">
             <key column="project_id"/>
-            <many-to-many column="employee_id" class="com.ideas2it.employeemanagement.model.Employee"/>
+            <many-to-many column="employee_id" class="com.ideas2it.project.employeemanagement.model.Employee"/>
         </bag>
     </class>
 </hibernate-mapping>

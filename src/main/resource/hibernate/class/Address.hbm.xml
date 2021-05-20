@@ -3,7 +3,7 @@
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="com.ideas2it.employeemanagement.model.Address" table="address" dynamic-update="true">
+    <class name="com.ideas2it.project.employeemanagement.model.Address" table="address" dynamic-update="true">
         <id name="id" column="id" type="int">
             <generator class="increment"/>
         </id>
@@ -17,6 +17,6 @@
         <property name="pinCode" column="pin_code" type="int"/>
         <property name="addressType" column="address_type" type="string"/>
         <property name="isDeleted" column="is_deleted" type="boolean"/>
-        <many-to-one name="employee" column="employee_id" class="com.ideas2it.employeemanagement.model.Employee"/>
+        <many-to-one name="employee" column="employee_id" class="com.ideas2it.project.employeemanagement.model.Employee"/>
     </class>
 </hibernate-mapping>

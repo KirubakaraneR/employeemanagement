@@ -38,9 +38,8 @@
 </style>
 </head>
 <body>
-
   <div class="container">
-    <form action="EmployeeController" method="post">
+    <form action="LoginAuthentication" method="post">
       <h2>Welcome to Ideas2it</h2><br>
       <label>Email</label><br>
       <input type="text" name="email" required><br>

@@ -12,17 +12,17 @@
   
   <servlet>
     <servlet-name>EmployeeController</servlet-name>
-    <servlet-class>com.ideas2it.employeemanagement.controller.EmployeeController</servlet-class>
+    <servlet-class>com.ideas2it.project.employeemanagement.controller.EmployeeController</servlet-class>
   </servlet>
   
   <servlet>
     <servlet-name>ProjectController</servlet-name>
-    <servlet-class>com.ideas2it.projectmanagement.controller.ProjectController</servlet-class>
+    <servlet-class>com.ideas2it.project.projectmanagement.controller.ProjectController</servlet-class>
   </servlet>
   
   <servlet>
-    <servlet-name>AuthenticationController</servlet-name>
-    <servlet-class>com.ideas2it.authenticationservlet.AuthenticationController</servlet-class>
+    <servlet-name>LoginAuthentication</servlet-name>
+    <servlet-class>com.ideas2it.project.loginauthentication.LoginAuthentication</servlet-class>
   </servlet>
   
   <servlet-mapping>
@@ -36,7 +36,7 @@
   </servlet-mapping>
   
   <servlet-mapping>
-    <servlet-name>AuthenticationController</servlet-name>
-    <url-pattern>/AuthenticationController</url-pattern>
+    <servlet-name>LoginAuthentication</servlet-name>
+    <url-pattern>/LoginAuthentication</url-pattern>
   </servlet-mapping>
 </web-app>
