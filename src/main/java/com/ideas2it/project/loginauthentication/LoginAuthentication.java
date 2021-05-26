@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 
 import com.ideas2it.project.employeemanagement.service.EmployeeService;
 import com.ideas2it.project.employeemanagement.service.impl.EmployeeServiceImpl;
+import com.ideas2it.project.exceptions.ProjectException;
 
 /**
  * Servlet implementation class LoginAuthentication
@@ -45,8 +46,12 @@ public class LoginAuthentication extends HttpServlet {
 				password.equals("ideas2it")) {
 			HttpSession session = request.getSession();
 			session.setAttribute("mailId", mailId);
-			request.setAttribute("employeeList", 
-					employeeService.getTodayEvents());
+			try {
+				request.setAttribute("employeeList", 
+						employeeService.getTodayEvents());
+			} catch (ProjectException e) {
+				e.printStackTrace();
+			}
 			request.getRequestDispatcher("homePage.jsp").forward(request, response);
 		} else {
 			response.sendRedirect("index.jsp");

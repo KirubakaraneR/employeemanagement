@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.query.Query;
-import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 
+import com.ideas2it.project.exceptions.ProjectException;
+import com.ideas2it.project.logger.Loggers;
 import com.ideas2it.project.projectmanagement.dao.ProjectDao;
 import com.ideas2it.project.projectmanagement.model.Project;
 import com.ideas2it.sessionfactory.DataBaseConnection;
@@ -18,126 +19,146 @@ import com.ideas2it.sessionfactory.DataBaseConnection;
  * @author Kirubakarane R
  */
 public class ProjectDaoImpl implements ProjectDao {
-    private DataBaseConnection dataBaseConnection = DataBaseConnection.getInstance();
+	private DataBaseConnection dataBaseConnection = 
+			DataBaseConnection.getInstance();
+	private Loggers log = new Loggers(ProjectDaoImpl.class);
 
+	/**
+	 * {@inheritdoc}
+	 * @throws EmployeeManagementException 
+	 */
+	@Override
+	public boolean addOrUpdateProject(Project project) 
+			throws ProjectException {
+		Session session = null;
+		boolean checkIsAdded = true;
 
-    /**
-     * {@inheritdoc}
-     */
-    @Override
-    public boolean addOrUpdateProject(Project project) {
-        Session session = null;
-        boolean checkIsAdded = true;
-       
-        try {
-            session = dataBaseConnection.getSessionFactory().openSession();
-            session.beginTransaction();
-            session.saveOrUpdate(project);
-            session.getTransaction().commit();
-        } catch (HibernateException e) {
-            checkIsAdded = false;
-            session.getTransaction().rollback();
-        } finally {
-            closeSession(session);
-        }
-        return checkIsAdded;
-    }
+		try {
+			session = dataBaseConnection.getSessionFactory().openSession();
+			session.beginTransaction();
+			session.saveOrUpdate(project);
+			session.getTransaction().commit();
+		} catch (HibernateException e) {
+			checkIsAdded = false;
+			session.getTransaction().rollback();
+			log.logError("Issue while adding or updating the values.", e);
+			throw new ProjectException("Issue while adding "
+					+ "or updating the values.");
+		} finally {
+			closeSession(session);
+		}
+		return checkIsAdded;
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    @Override
-    public List<Project> getAllProject() {
-        Session session = null;
-        List<Project> project = null;
+	/**
+	 * {@inheritdoc}
+	 * @throws EmployeeManagementException 
+	 */
+	@Override
+	public List<Project> getAllProject() throws ProjectException {
+		Session session = null;
+		List<Project> project = null;
 
-        try {
-            session = dataBaseConnection.getSessionFactory().openSession();
-            Query query = session.createQuery("FROM Project project WHERE is_deleted = false");
-            project = 	query.list();
-        } catch (HibernateException e) {
-            e.printStackTrace();
-        } finally {
-      
-            if(session != null) {
-                session.close();
-            }
-        }
-        return project;
-    }
+		try {
+			session = dataBaseConnection.getSessionFactory().openSession();
+			Query query = session.createQuery("FROM Project project "
+					+ "WHERE is_deleted = false");
+			project = 	query.list();
+		} catch (HibernateException e) {
+			log.logError("Issue in fetching all datas from the table.", e);
+			throw new ProjectException("Issue in fetching all datas "
+					+ "from the table.");
+		} finally {
 
-    /**
-     * {@inheritdoc}
-     */
-    @Override
-    public Project getProject(int id) {
-        Session session = null;
-        Project project = null;
+			if(session != null) {
+				session.close();
+			}
+		}
+		return project;
+	}
 
-        try {
-            session = dataBaseConnection.getSessionFactory().openSession();
-            session.beginTransaction();
-            project = (Project)session.get(Project.class, id);
-            session.getTransaction().commit();
-        } catch (HibernateException e) {
-            e.printStackTrace();
-            session.getTransaction().rollback();
-        } finally {
-            closeSession(session);
-        }
-        return project;
-    }
+	/**
+	 * {@inheritdoc}
+	 * @throws ProjectManagementException 
+	 */
+	@Override
+	public Project getProject(int id) throws ProjectException {
+		Session session = null;
+		Project project = null;
 
-    /**
-     * {@inheritdoc}
-     */
-    @Override
-    public int getIdCount(int id) {
-        Session session = null;
-        int count = 0;
+		try {
+			session = dataBaseConnection.getSessionFactory().openSession();
+			session.beginTransaction();
+			project = (Project)session.get(Project.class, id);
+			session.getTransaction().commit();
+		} catch (HibernateException e) {
+			session.getTransaction().rollback();
+			log.logError("Issue in fetching individual project "
+					+ "details from table", e);
+			throw new ProjectException("Issue in fetching individual "
+					+ "project details from table.");
+		} finally {
+			closeSession(session);
+		}
+		return project;
+	}
 
-        try {
-            session = dataBaseConnection.getSessionFactory().openSession();
-            Query query = session.createQuery("SELECT COUNT(id) FROM Project project WHERE"
-                    + " is_deleted = false AND id = :id");
-            query.setParameter("id", id);
-            count = ((Long)query.uniqueResult()).intValue();
-        } catch (HibernateException e) {
-            count = 0;
-        } finally {
-            closeSession(session);
-        }
-        return count;
-    }
+	/**
+	 * {@inheritdoc}
+	 * @throws ProjectManagementException 
+	 */
+	@Override
+	public int getIdCount(int id) throws ProjectException {
+		Session session = null;
+		int count = 0;
 
-    /**
-     * {@inheritdoc}
-     */
-    @Override
-    public int getDeletedIdCount(int id) {
-        Session session = null;
-        int count = 0;
+		try {
+			session = dataBaseConnection.getSessionFactory().openSession();
+			Query query = session.createQuery("SELECT COUNT(id) FROM Project project WHERE"
+					+ " is_deleted = false AND id = :id");
+			query.setParameter("id", id);
+			count = ((Long)query.uniqueResult()).intValue();
+		} catch (HibernateException e) {
+			count = 0;
+			log.logError("Issue in getting count value", e);
+			throw new ProjectException("Issue in getting count value.");
+		} finally {
+			closeSession(session);
+		}
+		return count;
+	}
 
-        try {
-            session = dataBaseConnection.getSessionFactory().openSession();
-            Query query = session.createQuery("SELECT COUNT(id) FROM Project project WHERE"
-                    + " is_deleted = true AND id = :id");
-            query.setParameter("id", id);
-            count = ((Long)query.uniqueResult()).intValue();
-        } catch (HibernateException e) {
-            count = 0;
-        } finally {
-            closeSession(session);
-        }
-        return count;
-    }
+	/**
+	 * {@inheritdoc}
+	 * @throws ProjectManagementException 
+	 */
+	@Override
+	public int getDeletedIdCount(int id) throws ProjectException {
+		Session session = null;
+		int count = 0;
 
-    /**
-     * We close the session object.
-     */
-    private void closeSession(Session session) {
-        if(session != null) {
-            session.close();
-        }
-    }
+		try {
+			session = dataBaseConnection.getSessionFactory().openSession();
+			Query query = session.createQuery("SELECT COUNT(id) FROM Project project WHERE"
+					+ " is_deleted = true AND id = :id");
+			query.setParameter("id", id);
+			count = ((Long)query.uniqueResult()).intValue();
+		} catch (HibernateException e) {
+			count = 0;
+			log.logError("Issue in getting count value.", e);
+			throw new ProjectException("Issue in getting count value.");
+		} finally {
+			closeSession(session);
+		}
+		return count;
+	}
+
+	/**
+	 * We close the session object.
+	 */
+	private void closeSession(Session session) {
+		if(session != null) {
+			session.close();
+		}
+	}
 }

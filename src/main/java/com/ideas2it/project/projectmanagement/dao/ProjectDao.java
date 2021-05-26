@@ -2,6 +2,7 @@ package com.ideas2it.project.projectmanagement.dao;
 
 import java.util.List;
 
+import com.ideas2it.project.exceptions.ProjectException;
 import com.ideas2it.project.projectmanagement.model.Project;
 
 /**
@@ -20,22 +21,25 @@ public interface ProjectDao {
      *
      * @return true if datas are successfully added to table
      *         else false
+     * @throws ProjectException 
      */
-    public boolean addOrUpdateProject(Project project);
+    public boolean addOrUpdateProject(Project project) throws ProjectException;
 
     /**
      * We get all the project details for display from the table.
      *
-     * @return List of project values
+     * @return List of project values 
+     * @throws ProjectException 
      */
-    public List<Project> getAllProject();
+    public List<Project> getAllProject() throws ProjectException;
 
     /**
      * We get individual the project details for display from the table.
      *
      * @return project pojo
+     * @throws ProjectException 
      */
-    public Project getProject(int id);
+    public Project getProject(int id) throws ProjectException;
 
     /**
      * We get the id count for given project id.
@@ -43,8 +47,9 @@ public interface ProjectDao {
      * @param id - Project id
      *
      * @return count
+     * @throws ProjectException 
      */
-    public int getIdCount(int id);
+    public int getIdCount(int id) throws ProjectException;
 
     /**
      * We get the id count of deleted id for given project id.
@@ -52,6 +57,7 @@ public interface ProjectDao {
      * @param id - Project id
      *
      * @return count
+     * @throws ProjectException 
      */
-    public int getDeletedIdCount(int id);
+    public int getDeletedIdCount(int id) throws ProjectException;
 }

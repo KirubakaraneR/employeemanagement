@@ -3,7 +3,7 @@ package com.ideas2it.project.projectmanagement.service;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.ideas2it.project.employeemanagement.model.Employee;
+import com.ideas2it.project.exceptions.ProjectException;
 import com.ideas2it.project.projectmanagement.model.Project;
 
 /**
@@ -26,9 +26,10 @@ public interface ProjectService {
      *
      * @return true if datas are successfully added to table
      *         else false
+     * @throws ProjectException 
      */
-    public boolean createProject(String name, LocalDate startDate,
-            LocalDate endDate, String status);
+    public void createProject(String name, LocalDate startDate,
+            LocalDate endDate, String status) throws ProjectException;
 
     /**
      * We get details of an individual project.
@@ -36,24 +37,27 @@ public interface ProjectService {
      * @param id - Project id
      *
      * @return Project Pojo
+     * @throws ProjectException 
      */
-    public Project getIndividualProjectForDisplay(int id);
+    public Project getIndividualProjectForDisplay(int id) throws ProjectException;
 
     /**
      * We get all the project details for display.
      *
      * @return List of project value
+     * @throws ProjectException 
      */
-    public List<Project> getProjectForDisplay();
+    public List<Project> getProjectForDisplay() throws ProjectException;
 
     /**
      * We update the project status like started or not
      *
      * @param id - Project id
      * @param status - Project status
+     * @throws ProjectException 
      */
-    public boolean updateProject(int id, String name, LocalDate startDate,
-    		LocalDate endDate, String status);
+    public void updateProject(int id, String name, LocalDate startDate,
+    		LocalDate endDate, String status) throws ProjectException;
 
     /**
      * We delete entire details of a project
@@ -62,24 +66,27 @@ public interface ProjectService {
      *
      * @return true if datas are successfully deleted from table
      *         else false
+     * @throws ProjectException 
      */
-    public boolean deleteProject(int id);
+    public boolean deleteProject(int id) throws ProjectException;
 
     /**
      * We assign list of employees to a project
      *
      * @param id - Project id
      * @param employeeIdList - List of employee id
+     * @throws ProjectException 
      */
-    public void assignEmployeeToProject(int id, List<String> employeeIdList);
+    public void assignEmployeeToProject(int id, List<String> employeeIdList) throws ProjectException;
 
     /**
      * We unassign list of employees from the project
      *
      * @param id - Project id
      * @param employeeIdList - List of employee id
+     * @throws ProjectException 
      */
-    public void unassignEmployeeFromProject(int id, List<String> employeeIdList);
+    public void unassignEmployeeFromProject(int id, List<String> employeeIdList) throws ProjectException;
   
     /**
      * We get the employee id list.
@@ -88,8 +95,9 @@ public interface ProjectService {
      * @param employeeIdList - List of employee Id
      *
      * @return List of employee id
+     * @throws ProjectException 
      */
-    public List<List<String>> getEmployeeIdList(int id, List<String> employeeIdList);
+    public List<List<String>> getEmployeeIdList(int id, List<String> employeeIdList) throws ProjectException;
 
     /**
      * We display list of employees who are assigned to project.
@@ -97,8 +105,9 @@ public interface ProjectService {
      * @param id - Project id
      *
      * @return List of Employees
+     * @throws ProjectException 
      */
-    public List<String> getAssignedEmployees(int id);
+    public List<String> getAssignedEmployees(int id) throws ProjectException;
    
     /**
      * We get the project details which matchs with the id list we are
@@ -107,8 +116,9 @@ public interface ProjectService {
      * @param projectIdList - List of project id
      *
      * @return List of project details
+     * @throws ProjectException 
      */
-    public List<Project> getProject(List<Integer> projectIdList);
+    public List<Project> getProject(List<Integer> projectIdList) throws ProjectException;
 
     /**
      * We check whether the list is empty or not.
@@ -127,8 +137,9 @@ public interface ProjectService {
      *
      * @return true if project id exist
      *         else false
+     * @throws ProjectException 
      */
-    public boolean checkIdExistOrNot(int id);
+    public boolean checkIdExistOrNot(int id) throws ProjectException;
 
     /**
      * We check whether the id is deleted.
@@ -137,8 +148,9 @@ public interface ProjectService {
      * 
      * @return true if the id is deleted
      *         else false
+     * @throws ProjectException 
      */
-    public boolean checkIdIsDeleted(int id);
+    public boolean checkIdIsDeleted(int id) throws ProjectException;
 
     /**
      * We restore the deleted project.
@@ -147,6 +159,7 @@ public interface ProjectService {
      *
      * @return true if project is restored successfully
      *         else false
+     * @throws ProjectException 
      */
-    public boolean restoreProject(int id);
+    public boolean restoreProject(int id) throws ProjectException;
 }

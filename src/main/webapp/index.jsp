@@ -8,12 +8,15 @@
 <style type="text/css">
   body {
     font-family: Calibri, Helvetica, sans-serif;  
+    background-image: url('papa.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
   }
   
   .container {
     position: fixed;
     top: 48%;
-    left: 50%;
+    left: 70%;
     transform: translate(-50%,-50%);
   }
   
