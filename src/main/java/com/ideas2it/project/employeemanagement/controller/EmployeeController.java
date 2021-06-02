@@ -82,12 +82,10 @@ public class EmployeeController extends HttpServlet {
 			case "assignedProjects":
 				goToAssignedProjectsPage(request, response);
 				break;
-
-			default:
-				break;
 			}	
 		} catch (UserDefinedException e) {
-            log.logError("Input doesnt match.");
+            log.logError("The action value passed from the jsp page doesn't "
+            		+ "match with switch cases.");
 		}
 	}
 
@@ -108,7 +106,7 @@ public class EmployeeController extends HttpServlet {
 					response);
 		} catch (ServletException | IOException e) {
 			log.logError("Error in loading homePage.jsp", e);
-			errorPage(request, response);
+			errorPage(request, response, "ERROR 404");
 		}
 	}
 
@@ -131,7 +129,7 @@ public class EmployeeController extends HttpServlet {
 					response);
 		} catch (ServletException | IOException e) {
 			log.logError("Error in loading employeePage.jsp", e);
-			errorPage(request, response);
+			errorPage(request, response, "ERROR 404");
 		}
 	}
 
@@ -149,7 +147,7 @@ public class EmployeeController extends HttpServlet {
 			response.sendRedirect("employeeForm.jsp");
 		} catch (IOException e) {
 			log.logError("Error in loading employeeForm.jsp", e);
-			errorPage(request, response);
+			errorPage(request, response, "ERROR 404");
 		}
 	}
 
@@ -174,7 +172,7 @@ public class EmployeeController extends HttpServlet {
 					response);
 		} catch (ServletException | IOException e) {
 			log.logError("Error in loading addressPage.jsp", e);
-			errorPage(request, response);
+			errorPage(request, response, "ERROR 404");
 		}
 	}
 
@@ -191,7 +189,7 @@ public class EmployeeController extends HttpServlet {
 			HttpServletResponse response) throws UserDefinedException {
 		String id = request.getParameter("employeeId");
 		employeeService.deleteEmployee(id);
-		goToEmployeeMainPage(request, response);
+		errorPage(request, response, "The employee " + id + " is deleted successfully.");
 	}
 
 	/**
@@ -214,7 +212,7 @@ public class EmployeeController extends HttpServlet {
 					response);
 		} catch (ServletException | IOException e) {
 			log.logError("Error in loading employeeForm.jsp", e);
-			errorPage(request, response);
+			errorPage(request, response, "ERROR 404");
 		}
 	}
 
@@ -236,7 +234,7 @@ public class EmployeeController extends HttpServlet {
 					response);
 		} catch (ServletException | IOException e) {
 			log.logError("Error in loading addressForm.jsp", e);
-			errorPage(request, response);
+			errorPage(request, response, "ERROR 404");
 		}
 	}
 
@@ -262,7 +260,7 @@ public class EmployeeController extends HttpServlet {
 					response);
 		} catch (ServletException | IOException e) {
 			log.logError("Error in loading addressForm.jsp", e);
-			errorPage(request, response);
+			errorPage(request, response, "ERROR 404");
 		}
 	}
 
@@ -280,7 +278,7 @@ public class EmployeeController extends HttpServlet {
 		int addressId = Integer.parseInt(request.getParameter("id"));
 		String employeeId = request.getParameter("employeeId");
 		employeeService.deleteIndividualAddress(employeeId, addressId);
-		goToEmployeeMainPage(request, response);
+		errorPage(request, response, "The address id " + addressId + " is deleted successfully.");
 	}
 
 	/**
@@ -312,7 +310,7 @@ public class EmployeeController extends HttpServlet {
 					response);
 		} catch (ServletException | IOException e) {
 			log.logError("Error in loading projectAssign.jsp", e);
-			errorPage(request, response);
+			errorPage(request, response, "ERROR 404");
 		}
 	}
 
@@ -336,7 +334,7 @@ public class EmployeeController extends HttpServlet {
 					response);
 		} catch (ServletException | IOException e) {
 			log.logError("Error in loading assignedProjectPage.jsp", e);
-			errorPage(request, response);
+			errorPage(request, response, "ERROR 404");
 		}
 	}
 
@@ -379,12 +377,10 @@ public class EmployeeController extends HttpServlet {
 			case "unAssignProjectsToEmployee":
 				unAssignProjectsToEmployee(request, response);
 				break;
-
-			default:
-				break;
 			} 
 		} catch (UserDefinedException e) {
-            log.logError("Input doesnt match.");
+			log.logError("The action value passed from the jsp page doesn't "
+            		+ "match with switch cases.");
 		}
 	}
 
@@ -525,8 +521,14 @@ public class EmployeeController extends HttpServlet {
 	 */
 	private void restoreEmployee(HttpServletRequest request, 
 			HttpServletResponse response) throws UserDefinedException {
+		String id = request.getParameter("id");
 		try {
-			employeeService.restoreEmployee(request.getParameter("id"));
+			if (employeeService.checkIdIsDeleted(id)) {
+			    employeeService.restoreEmployee(id);
+			    errorPage(request, response, "The employee id " + id + " is restored successfully.");
+			} else {
+				errorPage(request, response, "The employee id " + id + " is not present.");
+			}
 		} catch (NumberFormatException e) {
 			log.logError("There is an issue in getting value from restoreEmployee.jsp."
 					+ "The may be issue in parameter variable or the input type data may differ.", e);
@@ -568,7 +570,7 @@ public class EmployeeController extends HttpServlet {
 				goToProjectAssignPage(request, response);
 			} 
 		} catch (ServletException | IOException e) {
-			errorPage(request, response);
+			errorPage(request, response, "ERROR 404");
 		} catch (NumberFormatException e) {
 			log.logError("There is an issue in getting value from "
 					+ "The may be issue in parameter variable or the input type data may differ.", e);
@@ -610,7 +612,7 @@ public class EmployeeController extends HttpServlet {
 				goToAssignedProjectsPage(request, response);
 			}
 		} catch (ServletException | IOException e) {
-			errorPage(request, response);
+			errorPage(request, response, "ERROR 404");
 		} catch (NumberFormatException e) {
 			log.logError("There is an issue in getting value from "
 					+ "The may be issue in parameter variable or the input type data may differ.", e);
@@ -625,11 +627,12 @@ public class EmployeeController extends HttpServlet {
 	 * @param response
 	 */
 	private void errorPage(HttpServletRequest request, 
-			HttpServletResponse response) {
+			HttpServletResponse response, String message) {
 		try {
-			response.sendRedirect("errorPage.jsp");
-		} catch (IOException e) {
-
+			request.setAttribute("message", message);
+			request.getRequestDispatcher("infoPage.jsp").forward(request, response);
+		} catch (ServletException | IOException e) {
+            e.printStackTrace();
 		}
 	}
 }

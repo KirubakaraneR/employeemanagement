@@ -36,11 +36,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
             session.beginTransaction();
             session.saveOrUpdate(employee);
             session.getTransaction().commit();
-            log.logInfo("success");
         } catch (HibernateException e) {
             checkIsAdded = false;
             session.getTransaction().rollback();
-            log.logError("Issue while adding or updating values.", e);
+            log.logDebug("Issue while adding or updating the values in DB.");
+            log.logError(e);
             throw new UserDefinedException("Issue while adding or updating values.");
         } finally {
             closeSession(session);
@@ -63,7 +63,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
             		+ "= false ORDER BY date_of_join desc");
             employee = query.list();
         } catch (HibernateException e) {
-        	log.logError("Issue while fetching all employee datas.", e);
+        	log.logDebug("Issue while fetching all employee datas from DB.");
+        	log.logError(e);
             throw new UserDefinedException("Issue while fetching all employee datas.");
         } finally {
             closeSession(session);
@@ -87,7 +88,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
             session.getTransaction().commit();
         } catch (HibernateException e) {
             session.getTransaction().rollback();
-            log.logError("Issue while fetching individual employee datas.", e);
+            log.logDebug("Issue while fetching individual employee datas from DB.");
+            log.logError(e);
             throw new UserDefinedException("Issue while fetching individual employee datas.");
         } finally {
             closeSession(session);
@@ -112,7 +114,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
             query.setParameter("year", year);
             employee = query.list();
         } catch (HibernateException e) {
-        	log.logError("Issue while fetching employee datas.", e);
+        	log.logDebug("Issue while fetching employee datas from DB.");
+        	log.logError(e);
         	throw new UserDefinedException("Issue while fetching employee datas.");
         } finally {
             closeSession(session);
@@ -137,7 +140,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
             count = ((Long)query.uniqueResult()).intValue();
         } catch (HibernateException e) {
             count = 0;
-            log.logError("Issue in getting year count.", e);
+            log.logDebug("Issue in getting year count.");
+            log.logError(e);
             throw new UserDefinedException("Issue in getting year count.");
         } finally {
             closeSession(session);
@@ -162,7 +166,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
             count = ((Long)query.uniqueResult()).intValue();
         } catch (HibernateException e) {
             count = 0;
-            log.logError("Issue in getting count value.", e);
+            log.logDebug("Issue in getting count value.");
+            log.logError(e);
             throw new UserDefinedException("Issue in getting count value.");
         } finally {
             closeSession(session);
@@ -187,7 +192,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
             count = ((Long)query.uniqueResult()).intValue();
         } catch (HibernateException e) {
             count = 0;
-            log.logError("Issue in getting address count.", e);
+            log.logDebug("Issue in getting address count.");
+            log.logError(e);
             throw new UserDefinedException("Issue in getting address count.");
         } finally {
             closeSession(session);
@@ -212,7 +218,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
             count = ((Long)query.uniqueResult()).intValue();
         } catch (HibernateException e) {
             count = 0;
-            log.logError("Issue in getting deleted id count.", e);
+            log.logDebug("Issue in getting deleted id count.");
+            log.logError(e);
             throw new UserDefinedException("Issue in getting deleted id count.");
         } finally {
             closeSession(session);

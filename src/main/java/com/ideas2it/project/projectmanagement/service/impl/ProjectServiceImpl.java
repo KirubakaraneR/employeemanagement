@@ -39,7 +39,8 @@ public class ProjectServiceImpl implements ProjectService {
 				Date.valueOf(startDate), Date.valueOf(endDate), status));  
 
 		if (true == isChecked) {
-			log.logInfo("New project values are created.");
+			log.logDebug("New project values are added.");
+			log.logDebug(new Project().toString());
 		} else {
 			log.logInfo("Issue in creating new project.");
 		}
@@ -59,11 +60,12 @@ public class ProjectServiceImpl implements ProjectService {
 		} catch (NullPointerException e) {
 
 			if (null != project) {
-				log.logInfo("Project values are fetched successfully for "
+				log.logDebug("Project values are fetched successfully for "
 						+ "project id" + id);
 			} else {
-				log.logError("The project id " + id + " is not available "
-						+ "to fetch.", e);
+				log.logDebug("The project id " + id + " is not available "
+						+ "to fetch.");
+				log.logError(e);
 			}
 		}
 		return project;
@@ -84,7 +86,8 @@ public class ProjectServiceImpl implements ProjectService {
 			if (!projectValues.isEmpty()) {
 				log.logInfo("Project values are fetched successfully.");
 			} else {
-				log.logError("There is an issue in fetching project values.", e);
+				log.logDebug("There is an issue in fetching project values.");
+				log.logError(e);
 			}
 		}
 		return projectValues;
@@ -98,9 +101,10 @@ public class ProjectServiceImpl implements ProjectService {
 	public void updateProject(int id, String name, LocalDate startDate,
 			LocalDate endDate, String status) throws UserDefinedException {
 		boolean isChecked = false;
+		Project project = null;
 
 		try {
-			Project project = projectDao.getProject(id);
+			project = projectDao.getProject(id);
 			project.setId(id);
 			project.setName(name);
 			project.setStartDate(Date.valueOf(startDate));
@@ -109,9 +113,11 @@ public class ProjectServiceImpl implements ProjectService {
 			isChecked = projectDao.addOrUpdateProject(project);  
 		} catch (NullPointerException | InputMismatchException e) {
 			if (true == isChecked) {
-				log.logInfo("Values are updated successfully.");
+				log.logDebug("Values are updated successfully.");
+				log.logDebug(project.toString());
 			} else {
-				log.logError("There is an issue in updating values.", e);
+				log.logDebug("There is an issue in updating values.");
+				log.logError(e);
 			}
 		}
 	}
@@ -130,7 +136,7 @@ public class ProjectServiceImpl implements ProjectService {
 		boolean isChecked = projectDao.addOrUpdateProject(project);
 
 		if (true == isChecked) {
-			log.logInfo("The project is deleted successfully.");
+			log.logDebug("The project id " + id + " is deleted successfully.");
 		} else {
 			log.logInfo("There is an issue in deleting project.");
 		}
@@ -316,7 +322,7 @@ public class ProjectServiceImpl implements ProjectService {
 		project.setIsDeleted(false);
 		boolean isChecked = projectDao.addOrUpdateProject(project);
 		if (true == isChecked) {
-			log.logInfo("Project is restored successfully.");
+			log.logDebug("Project id " + id + " is restored successfully.");
 		} else {
 			log.logInfo("There is an issue in restoring project.");
 		}

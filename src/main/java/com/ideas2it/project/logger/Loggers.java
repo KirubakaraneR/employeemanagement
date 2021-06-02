@@ -19,11 +19,19 @@ public class Loggers {
 		log.error(message);
 	}
 	
+	public void logError(Object error) {
+		log.error(error);
+	}
+	
 	public void logInfo(String message) {
 		log.info(message);
 	}
 	
 	public void logDebug(String message) {
 		log.debug(message);
+	}
+	
+	public void logFatal(String message, Object error) {
+		log.fatal(message, error);
 	}
 }

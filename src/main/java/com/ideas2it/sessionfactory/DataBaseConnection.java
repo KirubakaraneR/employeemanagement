@@ -1,6 +1,9 @@
 package com.ideas2it.sessionfactory;
 
 import org.hibernate.cfg.Configuration;
+
+import com.ideas2it.project.logger.Loggers;
+
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
@@ -13,6 +16,7 @@ import org.hibernate.SessionFactory;
 public class DataBaseConnection {
     private static DataBaseConnection dataBaseConnection = null;
     private static SessionFactory sessionFactory = null;
+    private static Loggers log = new Loggers(DataBaseConnection.class);
 
     private DataBaseConnection() {
     }
@@ -45,6 +49,7 @@ public class DataBaseConnection {
             }
         } catch (HibernateException e) {
             e.printStackTrace(); 
+            log.logFatal("There is an issue in creating session factory.", e);
         }
         return sessionFactory;
     }

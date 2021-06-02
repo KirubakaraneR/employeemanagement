@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1" import="com.ideas2it.project.employeemanagement.model.Employee, java.util.List"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
@@ -89,7 +89,7 @@ crossorigin="anonymous">
     <button>Create Employee</button></a>&nbsp;&nbsp;&nbsp;
     <a href="ProjectController?action=projectForm">
     <button>Create Project</button></a>&nbsp;&nbsp;&nbsp;
-    <a href="LoginAuthentication?action=changeAdminPassword">
+    <a href="">
     <button>Change Password</button></a>&nbsp;&nbsp;&nbsp;
     <a href="LoginAuthentication">
     <button>Logout</button></a>
@@ -124,6 +124,7 @@ crossorigin="anonymous">
           </tr>
         </c:forEach>
       </tbody>
+
         
     </table>
     </center>

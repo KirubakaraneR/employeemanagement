@@ -34,8 +34,6 @@ public class LoginAuthentication extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-		log.logDebug("This project is build on JDK 11 and Tomcat 10 server is used.\n"
-				+ "Since tomcat 10 here jakarta package is imported instead of javax.");
 		EmployeeService employeeService = new EmployeeServiceImpl();
 		String mailId = request.getParameter("email");
 		String password = request.getParameter("password");

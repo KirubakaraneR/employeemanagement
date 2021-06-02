@@ -67,12 +67,10 @@ public class ProjectController extends HttpServlet {
 			case "unAssignEmployee":
 				displayUnassignEmployee(request, response);
 				break;
-
-			default:
-				break;
 			}
 		} catch (UserDefinedException e) {
-
+			log.logError("The action value passed from the jsp page doesn't "
+					+ "match with switch cases.");
 		}
 	}
 
@@ -94,7 +92,7 @@ public class ProjectController extends HttpServlet {
 					response);
 		} catch (ServletException | IOException e) {
 			log.logError("Error in loading projectPage.jsp", e);
-			errorPage(request, response);
+			errorPage(request, response, "ERROR 404");
 		}
 	}
 
@@ -112,7 +110,7 @@ public class ProjectController extends HttpServlet {
 			response.sendRedirect("projectForm.jsp");
 		} catch (IOException e) {
 			log.logError("Error in loading projectForm.jsp", e);
-			errorPage(request, response);
+			errorPage(request, response, "ERROR 404");
 		}
 	}
 
@@ -136,7 +134,7 @@ public class ProjectController extends HttpServlet {
 					response);
 		} catch (ServletException | IOException e) {
 			log.logError("Error in loading projectForm.jsp", e);
-			errorPage(request, response);
+			errorPage(request, response, "ERROR 404");
 		}
 	}
 
@@ -153,7 +151,8 @@ public class ProjectController extends HttpServlet {
 			HttpServletResponse response) throws UserDefinedException {
 		int id = Integer.parseInt(request.getParameter("id"));
 		projectService.deleteProject(id);
-		displayProjectMainPage(request, response);
+		errorPage(request, response, "The project id " + id + " is deleted "
+				+ "successfully.");
 	}
 
 	/**
@@ -167,8 +166,15 @@ public class ProjectController extends HttpServlet {
 	 */
 	private void restoreProject(HttpServletRequest request, 
 			HttpServletResponse response) throws UserDefinedException {
-		projectService.restoreProject(Integer.parseInt(request.getParameter("id")));
-		displayProjectMainPage(request, response);
+		int id = Integer.parseInt(request.getParameter("id"));
+		
+		if (projectService.checkIdIsDeleted(id)) {
+		    projectService.restoreProject(id);
+		    errorPage(request, response, "The project id " + id + " is restored "
+					+ "successfully.");
+		} else {
+			errorPage(request, response, "The project id " + id + " is not present.");
+		}
 	}
 
 	/**
@@ -201,7 +207,7 @@ public class ProjectController extends HttpServlet {
 					response);
 		} catch (ServletException | IOException e) {
 			log.logError("Error in loading employeeAssign.jsp", e);
-			errorPage(request, response);
+			errorPage(request, response, "ERROR 404");
 		}
 	}
 
@@ -225,7 +231,7 @@ public class ProjectController extends HttpServlet {
 					response);
 		} catch (ServletException | IOException e) {
 			log.logError("Error in loading assignedEmployeePage.jsp", e);
-			errorPage(request, response);
+			errorPage(request, response, "ERROR 404");
 		}
 	}
 
@@ -254,12 +260,10 @@ public class ProjectController extends HttpServlet {
 			case "unAssignEmployeesToProject":
 				unAssignEmployeeToProject(request, response);
 				break;
-
-			default:
-				break;
 			}
 		} catch (UserDefinedException e) {
-
+			log.logError("The action value passed from the jsp page doesn't "
+					+ "match with switch cases.");
 		}
 	}
 
@@ -349,7 +353,7 @@ public class ProjectController extends HttpServlet {
 				displayAssignEmployee(request, response);
 			} 
 		} catch (ServletException | IOException e) {
-			errorPage(request, response);
+			errorPage(request, response, "ERROR 404");
 		} catch (NumberFormatException e) {
 			log.logError("There is an issue in getting value from projectForm.jsp."
 					+ "The may be issue in parameter variable or the input type data may differ.", e);
@@ -389,7 +393,7 @@ public class ProjectController extends HttpServlet {
 				displayUnassignEmployee(request, response);
 			} 
 		} catch (ServletException | IOException e) {
-			errorPage(request, response);
+			errorPage(request, response, "ERROR 404");
 		} catch (NumberFormatException e) {
 			log.logError("There is an issue in getting value from projectForm.jsp."
 					+ "The may be issue in parameter variable or the input type data may differ.", e);
@@ -404,11 +408,12 @@ public class ProjectController extends HttpServlet {
 	 * @param response
 	 */
 	private void errorPage(HttpServletRequest request, 
-			HttpServletResponse response) {
+			HttpServletResponse response, String message) {
 		try {
-			response.sendRedirect("errorPage.jsp");
-		} catch (IOException e) {
-
+			request.setAttribute("message", message);
+			request.getRequestDispatcher("infoPage.jsp").forward(request, response);
+		} catch (ServletException | IOException e) {
+            e.printStackTrace();
 		}
 	}
 }

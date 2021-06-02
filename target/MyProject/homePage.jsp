@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1" import="com.ideas2it.project.employeemanagement.model.Employee, java.util.List"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
@@ -89,7 +89,7 @@ crossorigin="anonymous">
     <button>Create Employee</button></a>&nbsp;&nbsp;&nbsp;
     <a href="ProjectController?action=projectForm">
     <button>Create Project</button></a>&nbsp;&nbsp;&nbsp;
-    <a href="LoginAuthentication?action=changeAdminPassword">
+    <a href="">
     <button>Change Password</button></a>&nbsp;&nbsp;&nbsp;
     <a href="LoginAuthentication">
     <button>Logout</button></a>
@@ -123,6 +123,18 @@ crossorigin="anonymous">
             <td>If you wanna wish <a href="">click here</a></td>
           </tr>
         </c:forEach>
+      </tbody>
+      --<tbody>
+          <%List<Employee> employee = (List<Employee>)request.getAttribute("employeeList");
+            for (Employee values : employee) {%>
+            <tr style="font-size: 20px;">
+            <td><%=values.getId() %></td>
+            <td><%=values.getName() %></td>
+            <td><%=values.getMobileNumber() %></td>
+            <td><%=values.getMailId() %></td>
+            <td><%=values.getDateOfBirth() %></td>
+            </tr>
+            <%} %>
       </tbody>
         
     </table>

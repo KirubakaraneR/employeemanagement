@@ -41,7 +41,8 @@ public class ProjectDaoImpl implements ProjectDao {
 		} catch (HibernateException e) {
 			checkIsAdded = false;
 			session.getTransaction().rollback();
-			log.logError("Issue while adding or updating the values.", e);
+			log.logDebug("Issue while adding or updating the values to DB.");
+			log.logError(e);
 			throw new UserDefinedException("Issue while adding "
 					+ "or updating the values.");
 		} finally {
@@ -65,7 +66,8 @@ public class ProjectDaoImpl implements ProjectDao {
 					+ "WHERE is_deleted = false");
 			project = 	query.list();
 		} catch (HibernateException e) {
-			log.logError("Issue in fetching all datas from the table.", e);
+			log.logDebug("Issue in fetching all datas from the DB.");
+			log.logError(e);
 			throw new UserDefinedException("Issue in fetching all datas "
 					+ "from the table.");
 		} finally {
@@ -93,8 +95,9 @@ public class ProjectDaoImpl implements ProjectDao {
 			session.getTransaction().commit();
 		} catch (HibernateException e) {
 			session.getTransaction().rollback();
-			log.logError("Issue in fetching individual project "
-					+ "details from table", e);
+			log.logDebug("Issue in fetching individual project "
+					+ "details from DB.");
+			log.logError(e);
 			throw new UserDefinedException("Issue in fetching individual "
 					+ "project details from table.");
 		} finally {
@@ -120,7 +123,8 @@ public class ProjectDaoImpl implements ProjectDao {
 			count = ((Long)query.uniqueResult()).intValue();
 		} catch (HibernateException e) {
 			count = 0;
-			log.logError("Issue in getting count value", e);
+			log.logDebug("Issue in getting count value from DB.");
+			log.logError(e);
 			throw new UserDefinedException("Issue in getting count value.");
 		} finally {
 			closeSession(session);
@@ -145,7 +149,8 @@ public class ProjectDaoImpl implements ProjectDao {
 			count = ((Long)query.uniqueResult()).intValue();
 		} catch (HibernateException e) {
 			count = 0;
-			log.logError("Issue in getting count value.", e);
+			log.logDebug("Issue in getting count value from DB.");
+			log.logError(e);
 			throw new UserDefinedException("Issue in getting count value.");
 		} finally {
 			closeSession(session);

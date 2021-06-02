@@ -45,7 +45,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 		boolean isChecked = employeeDao.addOrUpdateEmployee(employee);
 
 		if (true == isChecked) {
-			log.logInfo("New employee in created with employee id " + id);
+			log.logDebug("A new employee is added");
+			log.logDebug(employee.toString());
 		} else {
 			log.logInfo("There is an issue in creating new employee.");
 		}
@@ -71,9 +72,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 			employee.setAddresses(addressList);
 			isChecked = employeeDao.addOrUpdateEmployee(employee);
 			if (true == isChecked) {
-				
+				log.logDebug("Address is added for the employee " + id);
+				log.logDebug(address.toString());
 			} else {
-				
+				log.logInfo("THere is an issue in adding address to the employee " + id);
 			}
 		} catch (InputMismatchException e) {
 			log.logError("Input values doesn't match", e);
@@ -179,6 +181,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			String mobileNumber, String mailId, String password) 
 					throws UserDefinedException {
 		boolean isChecked = false;
+		
 		try {
 			Employee employee = employeeDao.getIndividualEmployee(id);
 			employee.setId(id);
@@ -191,6 +194,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 			employee.setMailId(mailId);
 			employee.setPassword(password);
 			isChecked = employeeDao.addOrUpdateEmployee(employee);
+			
+			if (true == isChecked) {
+				log.logDebug("The details have been updated to the employee " + id);
+				log.logDebug(employee.toString());
+			} else {
+				log.logInfo("There is an issue in adding employee.");
+			}
 		} catch (InputMismatchException e) {
 			log.logError("Input values doesnt match", e);
 		}
@@ -208,7 +218,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 			String addressType, int addressId) throws UserDefinedException {
 		Employee employee = employeeDao.getIndividualEmployee(employeeId);
 		List<Address> addressList = employee.getAddresses();
-
+		boolean isChecked = false;
+       
 		try {
 			for (Address address : addressList) {
 
@@ -225,10 +236,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 					address.setAddressType(addressType);
 				}
 			}
+			isChecked = employeeDao.addOrUpdateEmployee(employee);
+			
+			if (true == isChecked) {
+				log.logDebug("The address details have been updated to the employee " + employeeId);
+				log.logDebug(employee.getAddresses().toString());
+			} else {
+				log.logInfo("There is an issue in adding address for employee " + employeeId);
+			}
 		} catch (InputMismatchException e) {
 			log.logError("Input values doesnt match", e);
 		}
-		return employeeDao.addOrUpdateEmployee(employee);
+		return isChecked;
 	}
 
 	/**
@@ -250,7 +269,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		boolean isChecked = employeeDao.addOrUpdateEmployee(employee);
 
 		if (true == isChecked) {
-			log.logInfo("Employee " + id + " is deleted successfully.");
+			log.logDebug("Employee " + id + " is deleted successfully.");
 		} else {
 			log.logInfo("Issue in deleting employee");
 		}
@@ -273,7 +292,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		boolean isChecked = employeeDao.addOrUpdateEmployee(employee);
 
 		if (true == isChecked) {
-			log.logInfo("All Address of Employee " + id + " deleted successfully.");
+			log.logDebug("All Address of Employee " + id + " deleted successfully.");
 		} else {
 			log.logInfo("Issue in deleting address.");
 		}
@@ -298,7 +317,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		boolean isChecked = employeeDao.addOrUpdateEmployee(employee);
 
 		if (true == isChecked) {
-			log.logInfo("Individual address " + addressId + " deleted successfully.");
+			log.logDebug("Individual address " + addressId + " deleted successfully.");
 		} else {
 			log.logInfo("There is an issue in deleting address.");
 		}
@@ -320,7 +339,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 			employee.setId(id);
 			employee.setProjects(assignedProject);
 		} catch (InputMismatchException e) {
-			log.logError("Input values doesnt match.", e);
+			log.logDebug("The datas that we set into bean class doesn't match.");
+			log.logError(e);
 		}
 		employeeDao.addOrUpdateEmployee(employee);
 	}
@@ -350,7 +370,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 			employee.setId(id);
 			employee.setProjects(assignedProject);
 		} catch (InputMismatchException e) {
-			log.logError("Input value doesnt match.", e);
+			log.logDebug("The datas that we set into bean class doesn't match.");
+			log.logError(e);
 		}
 		employeeDao.addOrUpdateEmployee(employee);
 	}
@@ -486,9 +507,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 		boolean isChecked = employeeDao.addOrUpdateEmployee(employee);
 		
 		if (true == isChecked) {
-			log.logInfo("Employee is restored successfully.");
+			log.logDebug("Employee " + id + " is restored successfully.");
 		} else {
-			log.logInfo("Issue in restoring employee.");
+			log.logDebug("Issue in restoring employee " + id);
+			log.logInfo("This issue can occur if the id "+ id + " is not present in the DB.");
 		}
 		return isChecked;
 	}
